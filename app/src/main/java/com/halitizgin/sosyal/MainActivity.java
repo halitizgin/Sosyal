@@ -3,8 +3,10 @@ package com.halitizgin.sosyal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e)
                     {
                         signInProgress.dismiss();
-                        Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        showAlert(MainActivity.this, "Giriş yapılırken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
                     }
                 });
     }
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e)
                     {
                         signUpProgress.dismiss();
-                        Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        showAlert(MainActivity.this, "Üye olunurken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
                     }
                 });
     }
@@ -111,5 +113,19 @@ public class MainActivity extends AppCompatActivity {
         progress.setCancelable(isCancelable); // disable dismiss by tapping outside of the dialog
         progress.show();
         return progress;
+    }
+
+    public AlertDialog.Builder showAlert(Context context, String title, String message, String buttonTitle)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setNegativeButton(buttonTitle, new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        return builder;
     }
 }
