@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void signIn(View view)
     {
-        final ProgressDialog signInProgress = showLoading(this, "Giriş yapılıyor!", "Lütfen bekleyin", false);
+        final ProgressDialog signInProgress = Output.showLoading(this, "Giriş yapılıyor!", "Lütfen bekleyin", false);
+        signInProgress.show();
         mAuth.signInWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -75,14 +76,15 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e)
                     {
                         signInProgress.dismiss();
-                        showAlert(MainActivity.this, "Giriş yapılırken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
+                        Output.showAlert(MainActivity.this, "Giriş yapılırken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
                     }
                 });
     }
 
     public void signUp(View view)
     {
-        final ProgressDialog signUpProgress = showLoading(this, "Üye olunuyor!", "Lütfen bekleyin!", false);
+        final ProgressDialog signUpProgress = Output.showLoading(this, "Üye olunuyor!", "Lütfen bekleyin!", false);
+        signUpProgress.show();
         mAuth.createUserWithEmailAndPassword(emailText.getText().toString(), passwordText.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -100,32 +102,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e)
                     {
                         signUpProgress.dismiss();
-                        showAlert(MainActivity.this, "Üye olunurken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
+                        Output.showAlert(MainActivity.this, "Üye olunurken bir hata oluştu!", e.getLocalizedMessage(), "TAMAM").show();
                     }
                 });
-    }
-
-    public ProgressDialog showLoading(Context context, String title, String description, Boolean isCancelable)
-    {
-        ProgressDialog progress = new ProgressDialog(this);
-        progress.setTitle(title);
-        progress.setMessage(description);
-        progress.setCancelable(isCancelable); // disable dismiss by tapping outside of the dialog
-        progress.show();
-        return progress;
-    }
-
-    public AlertDialog.Builder showAlert(Context context, String title, String message, String buttonTitle)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setNegativeButton(buttonTitle, new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id) {
-
-            }
-        });
-
-        return builder;
     }
 }
