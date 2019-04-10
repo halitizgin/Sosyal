@@ -44,9 +44,16 @@ public class Post extends ArrayAdapter<String>
 
     public Post(ArrayList<String> email, ArrayList<String> title, ArrayList<String> image, Activity context) {
         super(context, R.layout.post_view, email);
-        Email = email;
-        Title = title;
-        Image = image;
+        this.Email = email;
+        this.Title = title;
+        this.Image = image;
         this.context = context;
+    }
+
+    public void clear()
+    {
+        Email.clear();
+        Title.clear();
+        Image.clear();
     }
 }

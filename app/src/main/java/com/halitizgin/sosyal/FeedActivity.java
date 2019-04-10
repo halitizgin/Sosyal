@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -68,9 +71,11 @@ public class FeedActivity extends AppCompatActivity {
         Images = new ArrayList<>();
         Titles = new ArrayList<>();
         Emails = new ArrayList<>();
+        listView = findViewById(R.id.listView);
 
         adapter = new Post(Emails, Titles, Images, this);
         listView.setAdapter(adapter);
+        getDataFromFirebase();
     }
 
     public void getDataFromFirebase()
@@ -78,8 +83,11 @@ public class FeedActivity extends AppCompatActivity {
         DatabaseReference newReference = firebaseDatabase.getReference("Posts");
         newReference.addValueEventListener(new ValueEventListener() {
             @Override
+
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
+                adapter.clear();
+                adapter.notifyDataSetChanged();
                 for (DataSnapshot ds : dataSnapshot.getChildren())
                 {
                     HashMap<String, String> hasmap = (HashMap<String, String>) ds.getValue();
@@ -93,7 +101,7 @@ public class FeedActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError)
             {
-
+                Output.showAlert(FeedActivity.this, "Veriler getirilirken bir hata oluştu!", databaseError.getMessage(), "TAMAM");
             }
         });
     }
